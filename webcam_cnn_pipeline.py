@@ -52,6 +52,18 @@ def create_matrices(X_1, X_2):
 
 def return_compiled_model(input_shape):
     model = Sequential()
+    model.add(MaxPooling2D((3,3), input_shape = (3, 144, 256)))
+    model.add(Flatten())
+    model.add(Dense(128, activation = "relu"))
+    model.add(Dropout(0.5))
+
+    model.add(Dense(1, activation = "sigmoid"))
+
+    model.compile(loss = "binary_crossentropy", optimizer = adam(lr = 0.001), metrics = ["accuracy"])
+    return(model)
+
+def return_compiled_model_2(input_shape):
+    model = Sequential()
 
     model.add(Convolution2D(32, 3, 3, activation = "relu", input_shape = (3, 144, 256)))
     model.add(Convolution2D(32, 3, 3, activation = "relu"))
