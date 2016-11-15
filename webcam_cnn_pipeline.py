@@ -21,10 +21,12 @@ def imgs_to_arr(cp, nr = 100, nframe = 10):
     for i in range(nr*10):
         ret, frame = cp.read(0)
         if i < 75:
-            cv2.putText(frame, "Prepare for Caption", (15,25), font, 0.75, (200,255,155), 1, cv2.LINE_AA)
+            cv2.putText(frame, "Prepare for Caption", (15,25),
+                        font, 0.75, (200,255,155), 1, cv2.LINE_AA)
         if i % nframe == 0 and i > 75: #capture every n frames and leave a few frames to get in position
             imgs.append(frame)
-            cv2.putText(frame, str(i/nframe), (15,25), font, 0.75, (200,255,155), 1, cv2.LINE_AA)
+            cv2.putText(frame, str(i/nframe), (15,25),
+                        font, 0.75, (200,255,155), 1, cv2.LINE_AA)
         cv2.imshow('frame',frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
@@ -59,7 +61,8 @@ def return_compiled_model(input_shape):
 
     model.add(Dense(1, activation = "sigmoid"))
 
-    model.compile(loss = "binary_crossentropy", optimizer = adam(lr = 0.001), metrics = ["accuracy"])
+    model.compile(loss = "binary_crossentropy",
+                  optimizer = adam(lr = 0.001), metrics = ["accuracy"])
     return(model)
 
 def return_compiled_model_2(input_shape):
@@ -70,10 +73,10 @@ def return_compiled_model_2(input_shape):
     model.add(Dropout(0.5))
     model.add(MaxPooling2D((2,2)))
 
-    model.add(Convolution2D(64, 3, 3, activation = "relu"))
-    model.add(Convolution2D(64, 3, 3, activation = "relu"))
-    model.add(Dropout(0.5))
-    model.add(GlobalAveragePooling2D())
+    #model.add(Convolution2D(64, 3, 3, activation = "relu"))
+    #model.add(Convolution2D(64, 3, 3, activation = "relu"))
+    #model.add(Dropout(0.5))
+    #model.add(GlobalAveragePooling2D())
 
     model.add(Dense(1, activation = "sigmoid"))
 

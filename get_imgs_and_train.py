@@ -14,6 +14,11 @@ os.chdir("/Users/alexpapiu/Documents/Data/OpenCV_CNN")
 N = int(sys.argv[1])
 label1 = sys.argv[2]
 label2 = sys.argv[3]
+model_type = sys.argv[4] #conv or mlp
+
+if model_type not in ["conv", "mlp"]:
+    raise ValueError("model_type must be conv for convolutional nets or mlp \
+                      for feed-forward nets")
 
 #creating datasets:
 print("First Label")
@@ -37,7 +42,11 @@ np.save("imgs", X)
 #predicting real time using a keras model:
 
 inp = X.shape[1:]
-model = return_compiled_model(input_shape = inp)
+
+if model_type == "mlp":
+    model = return_compiled_model(input_shape = inp)
+elif model_type == "conv":
+    model = return_compiled_model_2(input_shape = inp)
 
 #model.summary()
 #try:
@@ -45,13 +54,14 @@ model = return_compiled_model(input_shape = inp)
 #except:
 #    pass
 
-X_tr, X_val, y_tr, y_val = train_test_split(X, y, stratify = y, random_state = 3, test_size = 0.15)
+X_tr, X_val, y_tr, y_val = train_test_split(X, y, stratify = y,
+                                            random_state = 3, test_size = 0.15)
 
 print("training model")
-model.fit(X_tr, y_tr, validation_data = (X_val, y_val), nb_epoch=15, batch_size=32)
+model.fit(X_tr, y_tr, validation_data = (X_val, y_val), nb_epoch=5, batch_size=32)
 model.save("basic_model")
 
 
 #dict for label:
 labelz = {0:label1, 1:label2}
-real_time_pred(model, labelz, nframes = 10000)
+real_time_pred(model, labelz, nframes = 1000)
