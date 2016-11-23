@@ -54,7 +54,8 @@ def create_matrices(X_1, X_2):
 
 def return_compiled_model(input_shape):
     model = Sequential()
-    model.add(MaxPooling2D((3,3), input_shape = (3, 144, 256)))
+    model.add(MaxPooling2D((6,6), input_shape = input_shape))
+    #model.add(MaxPooling2D((2,2))) #this since we double resolution
     model.add(Flatten())
     model.add(Dense(128, activation = "relu"))
     model.add(Dropout(0.5))
@@ -67,17 +68,19 @@ def return_compiled_model(input_shape):
 
 def return_compiled_model_2(input_shape):
     model = Sequential()
-
-    model.add(Convolution2D(32, 3, 3, activation = "relu", input_shape = (3, 144, 256)))
+    model.add(MaxPooling2D((2,2), input_shape = input_shape))
+    model.add(Convolution2D(32, 3, 3, activation = "relu", ))
     model.add(Convolution2D(32, 3, 3, activation = "relu"))
     model.add(Dropout(0.5))
-    model.add(MaxPooling2D((2,2)))
+    model.add(MaxPooling2D((3,3)))
 
     #model.add(Convolution2D(64, 3, 3, activation = "relu"))
     #model.add(Convolution2D(64, 3, 3, activation = "relu"))
     #model.add(Dropout(0.5))
     #model.add(GlobalAveragePooling2D())
 
+    model.add(Flatten())
+    model.add(Dense(128, activation = "relu"))
     model.add(Dense(1, activation = "sigmoid"))
 
     model.compile(loss = "binary_crossentropy", optimizer = adam(lr = 0.001), metrics = ["accuracy"])
@@ -92,11 +95,10 @@ def predict_from_frame(model, frame, labelz):
     label = labelz[preds]
     return(label)
 
-
 def real_time_pred(model, labelz, nframes = 1000):
     cp = cv2.VideoCapture(0)
-    cp.set(3, 256)
-    cp.set(4, 144)
+    cp.set(3, 2*256)
+    cp.set(4, 2*144)
     for i in range(nframes):
         ret, frame = cp.read(0)
         if i % 10 == 0:

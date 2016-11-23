@@ -6,15 +6,19 @@ from webcam_cnn_pipeline import *
 import sys
 #setting up camera:
 cp = cv2.VideoCapture(0)
-cp.set(3, 256)
-cp.set(4, 144)
+cp.set(3, 2*256)
+cp.set(4, 2*144)
 
 os.chdir("/Users/alexpapiu/Documents/Data/OpenCV_CNN")
 
 N = int(sys.argv[1])
-label1 = sys.argv[2]
-label2 = sys.argv[3]
-model_type = sys.argv[4] #conv or mlp
+
+
+label1 = input("What is the first label? ")
+
+label2 = input("What is the second label? ")
+
+model_type = input("What type of model do you want? Choose conv or mlp ") #conv or mlp
 
 if model_type not in ["conv", "mlp"]:
     raise ValueError("model_type must be conv for convolutional nets or mlp \
@@ -58,10 +62,10 @@ X_tr, X_val, y_tr, y_val = train_test_split(X, y, stratify = y,
                                             random_state = 3, test_size = 0.15)
 
 print("training model")
-model.fit(X_tr, y_tr, validation_data = (X_val, y_val), nb_epoch=5, batch_size=32)
+model.fit(X_tr, y_tr, validation_data = (X_val, y_val), nb_epoch=5, batch_size=8)
 model.save("basic_model")
 
 
 #dict for label:
 labelz = {0:label1, 1:label2}
-real_time_pred(model, labelz, nframes = 1000)
+real_time_pred(model, labelz, nframes = 10000)

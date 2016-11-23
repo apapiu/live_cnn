@@ -1,0 +1,20 @@
+import subprocess
+import speech_recognition as sr
+
+subprocess.call(["say", "what is your name?"])
+
+# obtain audio from the microphone
+r = sr.Recognizer()
+
+# recognize name:
+while True:
+    with sr.Microphone() as source:
+        audio = r.listen(source)
+    try:
+        answer = r.recognize_google(audio)
+        break
+    except sr.UnknownValueError:
+        subprocess.call(["say", "could you repeat that?"])
+
+
+subprocess.call(["say", "Hello there {0}, looking good today!".format(answer)])
