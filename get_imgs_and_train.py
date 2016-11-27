@@ -13,11 +13,9 @@ os.chdir("/Users/alexpapiu/Documents/Data/OpenCV_CNN")
 
 N = int(sys.argv[1])
 
-
 label1 = input("What is the first label? ")
-
 label2 = input("What is the second label? ")
-
+save_imgs = input("Do you want to save the images?[y/n]")
 model_type = input("What type of model do you want? Choose conv or mlp ") #conv or mlp
 
 if model_type not in ["conv", "mlp"]:
@@ -34,11 +32,12 @@ print("Second Label")
 X_2 = imgs_to_arr(cp = cp, nr = N, nframe = 5)
 #X_3 = imgs_to_arr(cp = cp, nr = 200, nframe = 10)
 
-X, y = create_matrices(X_1, X_2)
+#X, y = create_matrices(X_1, X_2)
+X, y = create_matricez(X_1, X_2)
 
 
-X.shape
-np.save("imgs", X)
+if save_imgs == "y":
+    np.save("imgs", X)
 #X = np.load("imgs.npy")
 
 #plt.imshow(X[70].transpose(1,2, 0))
