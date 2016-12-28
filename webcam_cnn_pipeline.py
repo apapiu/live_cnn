@@ -87,29 +87,34 @@ def return_compiled_model(input_shape, num_class = 2):
 
 
 
-def return_compiled_model_2(input_shape):
+def return_compiled_model_2(input_shape, num_class = 2):
     """a 2-layer convnet"""
 
     model = Sequential()
     model.add(MaxPooling2D((3,3), input_shape = input_shape))
 
     model.add(Convolution2D(32, 3, 3, activation = "relu"))
-    model.add(Dropout(0.4))
+    model.add(Dropout(0.5))
     model.add(MaxPooling2D((2,2)))
 
     model.add(Convolution2D(32, 3, 3, activation = "relu"))
-    model.add(Dropout(0.4))
+    model.add(Dropout(0.5))
+    model.add(MaxPooling2D((2,2)))
+
+    model.add(Convolution2D(32, 3, 3, activation = "relu"))
+    model.add(Dropout(0.5))
     model.add(MaxPooling2D((2,2)))
 
     model.add(Flatten())
-    model.add(Dense(64, activation = "relu"))
+    model.add(Dense(128, activation = "relu"))
     model.add(Dropout(0.5))
 
-    model.add(Dense(1, activation = "sigmoid"))
+    model.add(Dense(num_class, activation = "softmax"))
 
-    model.compile(loss = "binary_crossentropy",
-                  optimizer = adam(lr = 0.001), metrics = ["accuracy"])
+    model.compile(loss = "categorical_crossentropy", optimizer = "adam", metrics = ["accuracy"])
+
     return(model)
+
 
 
 

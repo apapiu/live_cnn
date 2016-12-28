@@ -1,12 +1,17 @@
 #code to get images from open cv into python
 #webcam_cnn_pipeline is a local module so export path first
-#!export PYTHONPATH="$PYTHONPATH:/Users/alexpapiu/Documents/Conv/OpenCV_CNN"
-from webcam_cnn_pipeline import *
 import sys
+
+sys.path.append("/Users/alexpapiu/Documents/Conv/OpenCV_CNN")
+from webcam_cnn_pipeline import *
+
+w = 1.5*144
+h = 2*144
+
 #setting up camera:
 cp = cv2.VideoCapture(0)
-cp.set(3, 2*256)
-cp.set(4, 2*144)
+cp.set(3, w)
+cp.set(4, h)
 
 os.chdir("/Users/alexpapiu/Documents/Data/OpenCV_CNN")
 
@@ -56,7 +61,7 @@ inp = X.shape[1:]
 if model_type == "mlp":
     model = return_compiled_model(input_shape = inp, num_class = num_classes)
 elif model_type == "conv":
-    model = return_compiled_model_2(input_shape = inp)
+    model = return_compiled_model_2(input_shape = inp, num_class = num_classes)
 
 X_tr, X_val, y_tr, y_val = train_test_split(X, y_ohe, stratify = y,
                                             random_state = 3, test_size = 0.15)
@@ -64,10 +69,12 @@ X_tr, X_val, y_tr, y_val = train_test_split(X, y_ohe, stratify = y,
 print("training model")
 model.fit(X_tr, y_tr, validation_data = (X_val, y_val), nb_epoch=3, batch_size=16)
 
-model.save("basic_model")
 
 more_training = input("Should I train the model more? Answer N or a number indicating \
                        the numbers of additional epochs: ")
+
+model.save("basic_model")
+
 
 if more_training != "N":
     model.fit(X_tr, y_tr, validation_data = (X_val, y_val),
@@ -75,7 +82,7 @@ if more_training != "N":
 
 #open a new video:
 cp = cv2.VideoCapture(0)
-cp.set(3, 2*256)
-cp.set(4, 2*144)
+cp.set(3, w)
+cp.set(4, h)
 
 real_time_pred(model, labelz, cp = cp, nframes = 10000)

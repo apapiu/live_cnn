@@ -71,16 +71,18 @@ for i in range(10000):
                                       cv2.CHAIN_APPROX_SIMPLE)
 
     rects = [cv2.boundingRect(contour) for contour in contours]
-    rects = [rect for rect in rects if rect[2] >= 8 and rect[3] >= 16]
+    rects = [rect for rect in rects if rect[2] >= 16 and rect[3] >= 8]
 
-    #draw rectangles and predict:
+    #draw rectangles and pred   ict:
     for rect in rects:
 
         x, y, w, h = rect
-        cv2.rectangle(final_img, (x-15, y-15), (x + 15 + w, y + 15 + h),
-                      color = (255, 255, 0))
+        #cv2.rectangle(frame, (x-15, y-15), (x + 15 + w, y + 15 + h),
+        #              color = (255, 255, 0))
 
-        if i >= 50:
+        if i >= 100:
+
+
             mnist_frame = extract_digit(frame, rect, pad = 15)
             if mnist_frame is not None:
                 mnist_frame = np.expand_dims(mnist_frame, 0) #needed for keras
@@ -89,6 +91,9 @@ for i in range(10000):
                 class_prediction = model.predict_classes(mnist_frame, verbose = False)[0]
                 #prediction = np.around(np.max(model.predict(mnist_frame, verbose = False)), 2)
                 #label = str(prediction) - if you want probabilities
+
+                cv2.rectangle(final_img, (x - 15, y - 15), (x + 15 + w, y + 15 + h),
+                              color = (255, 255, 0))
 
                 label = labelz[class_prediction]
                 annotate(final_img, label, location = (rect[0], rect[1]))
