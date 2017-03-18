@@ -10,8 +10,13 @@ Train a CNN from scratch with 10 examples per class, every image gets augmented 
 Reuse previous model:
   
     python reusing_model.py model_face
+    
+Retrain previous model with 5 new images per class:
+
+    python retrain.py 5 model_face
 
 model_face - a basic facial expression recognizer: happy, sad, normal
+
 model_hand - classes A,B,C,D,No Hand
 
 
